@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    @media print {
+        /* Hide UI elements */
+        nav, footer, .no-print { display: none !important; }
+        
+        /* Force Landscape Mode to fit the wide table */
+        @page { size: landscape; margin: 1cm; }
+        
+        /* Force Dark Text on White Background */
+        body, div, p, span, h1, h2, h3, table, td, th {
+            color: #000 !important;
+            background-color: transparent !important;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        /* Scale down slightly to ensure no cropping */
+        body { zoom: 90%; }
+        
+        /* Table Styling for Print */
+        table { width: 100% !important; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc !important; padding: 8px !important; }
+        
+        /* Prevent row breaking */
+        tr { page-break-inside: avoid; }
+    }
+</style>
+
+<div class="max-w-7xl mx-auto p-8">
+    
+    <div class="flex flex-col md:flex-row justify-between items-end border-b-2 border-purple-600 pb-6 mb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-purple-900 dark:text-purple-300 tracking-tight">Weekly Health Plan</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2 text-lg">Target Goal: <span class="font-bold text-purple-600 bg-purple-100 dark:bg-purple-900 dark:text-purple-200 px-2 py-1 rounded">{{ user.goal }}</span></p>
+        </div>
+        
+        <form method="POST" class="no-print flex flex-col md:flex-row gap-3 items-end mt-4 md:mt-0 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="flex flex-col">
+                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1">Your Suggestions</label>
+                <input type="text" name="suggestions" placeholder="e.g. No nuts..." class="bg-gray-100 dark:bg-gray-700 dark:text-white border-none p-2 rounded-lg text-sm font-bold focus:ring-2 focus:ring-purple-500 outline-none w-64">
+            </div>
+            <div class="flex flex-col">
+                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1">Diet Type</label>
+                <select name="preference" class="border-none bg-gray-100 dark:bg-gray-700 dark:text-white p-2 rounded-lg text-sm font-bold focus:ring-2 focus:ring-purple-500 outline-none">
+                    <option value="Vegetarian">🥗 Vegetarian</option>
+                    <option value="Non-Vegetarian">🍗 Non-Veg</option>
+                    <option value="Vegan">🌱 Vegan</option>
+                    <option value="Eggetarian">🥚 Eggetarian</option>
+                </select>
+            </div>
+            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-purple-700 transition shadow-lg flex items-center gap-2 h-10">
+                <span>✨ Generate</span>
+            </button>
+        </form>
+    </div>
+
+    {% if plan|length > 0 %}
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-purple-600 text-white text-sm uppercase tracking-wider">
+                    <th class="p-4 font-bold">Day</th>
+                    <th class="p-4 font-bold">Breakfast 🍳</th>
+                    <th class="p-4 font-bold">Lunch 🥗</th>
+                    <th class="p-4 font-bold">Dinner 🍲</th>
+                    <th class="p-4 font-bold">Workout 🏃</th>
+                    <th class="p-4 font-bold text-right">Stats</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700">
+                {% for item in plan %}
+                <tr class="hover:bg-purple-50 dark:hover:bg-purple-900/10 transition">
+                    <td class="p-4 font-black text-purple-800 dark:text-purple-300 w-32">{{ item.day }}</td>
+                    <td class="p-4 text-gray-700 dark:text-gray-300">{{ item.breakfast }}</td>
+                    <td class="p-4 text-gray-700 dark:text-gray-300">{{ item.lunch }}</td>
+                    <td class="p-4 text-gray-700 dark:text-gray-300">{{ item.dinner }}</td>
+                    <td class="p-4 font-medium text-red-500">{{ item.workout }}</td>
+                    <td class="p-4 text-right">
+                        <div class="text-xs font-bold text-gray-500 dark:text-gray-400">
+                            🔥 {{ item.calories }} cal <br>
+                            💪 {{ item.protein }}g prot
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-24 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border-2 border-dashed border-gray-200 dark:border-gray-700">
+        <div class="text-6xl mb-4 opacity-50">📅</div>
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-white">Your week is empty</h3>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">Enter your preferences above and click <b>Generate</b> to start.</p>
+    </div>
+    {% endif %}
+    
+    <div class="text-center no-print mt-16 space-x-4 pb-10">
+        <a href="/dashboard" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 font-bold px-6 py-3">← Back to Dashboard</a>
+        
+        <button onclick="window.print()" class="bg-purple-600 text-white px-10 py-4 rounded-full font-bold shadow-xl hover:bg-purple-700 hover:scale-105 transition">🖨️ Print Plan</button>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+Healthify/
+├── app.py                # Main Application Logic
+├── requirements.txt      # Library dependencies
+├── static/
+│   └── images/           # (Optional) Local images
+└── templates/            # HTML Files (Frontend)
+    ├── base.html         # Master Layout (Navbar/Footer)
+    ├── index.html        # Landing Page
+    ├── dashboard.html    # User Stats & Charts
+    └── tracker.html      # Add Meal/Workout Form

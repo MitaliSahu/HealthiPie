@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="relative bg-white dark:bg-gray-900 overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 pb-8 bg-white dark:bg-gray-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 min-h-[90vh] flex flex-col justify-center">
+            
+            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
+                    <div class="inline-block px-4 py-1 mb-4 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs uppercase tracking-wide">
+                        Your Personal Health Coach
+                    </div>
+                    <h1 class="text-5xl tracking-tight font-extrabold text-gray-900 dark:text-white sm:text-6xl md:text-8xl">
+                        <span class="block text-black dark:text-white mb-2 drop-shadow-xl">
+                            HEALTHIPIE
+                        </span>
+                        
+                        <span class="block text-emerald-600 dark:text-emerald-400 text-2xl sm:text-3xl md:text-4xl font-semibold mt-4">
+                            Healthy Body Comes With Good Nutrients
+                        </span>
+                    </h1>
+                    <p class="mt-6 text-base text-gray-500 dark:text-gray-400 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                        Stop struggling with complex apps. HealthiPie is your simple, intuitive solution for meal tracking, fitness planning, and progress analysis.
+                    </p>
+                    
+                    <div class="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start gap-4">
+                        {% if session.get('username') %}
+                            <a href="/dashboard" class="w-full flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-emerald-600 hover:bg-emerald-700 md:py-4 md:text-lg transition shadow-lg">
+                                🚀 Go to Dashboard
+                            </a>
+                        {% else %}
+                            <a href="/register" class="w-full flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-emerald-600 hover:bg-emerald-700 md:py-4 md:text-lg transition shadow-lg">
+                                Start Your Journey
+                            </a>
+                            <a href="/login" class="w-full flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-700 text-base font-bold rounded-full text-gray-700 dark:text-gray-200 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 md:py-4 md:text-lg transition">
+                                Login
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-95" 
+             style="clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%); object-position: center;"
+             src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2053&auto=format&fit=crop" 
+             alt="Healthy Food Bowl">
+    </div>
+</div>
+
+<div class="bg-gray-50 dark:bg-gray-800 py-16 border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-emerald-500 font-bold tracking-wide uppercase text-sm">Why HealthiPie?</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                Take Health Into Your Own Hands
+            </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div class="p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition">
+                <div class="text-4xl mb-4">🥗</div>
+                <h3 class="font-bold text-gray-800 dark:text-white text-xl">Smart Nutrition</h3>
+                <p class="text-gray-500 dark:text-gray-300 mt-2">Track calories effortlessly. Use our AI search to instantly find nutritional info for any dish.</p>
+            </div>
+            <div class="p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition">
+                <div class="text-4xl mb-4">🏃</div>
+                <h3 class="font-bold text-gray-800 dark:text-white text-xl">Workout Planner</h3>
+                <p class="text-gray-500 dark:text-gray-300 mt-2">Log activities and see your net calorie burn instantly to stay on top of your fitness goals.</p>
+            </div>
+            <div class="p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition">
+                <div class="text-4xl mb-4">📊</div>
+                <h3 class="font-bold text-gray-800 dark:text-white text-xl">Insightful Analytics</h3>
+                <p class="text-gray-500 dark:text-gray-300 mt-2">Visual charts help you monitor your calorie deficit, water intake, and weight trends over time.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

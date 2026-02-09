@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full px-6 py-8">
+    
+    <div class="mb-8 flex items-center p-4 rounded-xl bg-white dark:bg-gray-800 border-l-4 border-emerald-500 shadow-sm transition-colors">
+        <div class="mr-4 bg-emerald-100 dark:bg-emerald-900 p-2 rounded-full text-xl" id="time-icon">☀️</div>
+        <div>
+            <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide" id="time-greeting">RECOMMENDATION</p>
+            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium" id="smart-tip">Loading your tip...</p>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Hello, {{ user.name }}!</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                Weight: <span class="font-bold text-gray-800 dark:text-gray-200">{{ user.weight }} kg</span> • 
+                Goal: <span class="font-bold text-emerald-600">{{ user.goal }}</span>
+            </p>
+        </div>
+        
+        <div class="flex flex-wrap gap-3 mt-4 md:mt-0 justify-end items-center">
+            <a href="/plan" class="bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 px-4 py-2 rounded-lg font-bold hover:bg-purple-100 dark:hover:bg-purple-900/50 transition text-sm flex items-center gap-2">
+                📅 Weekly Plan
+            </a>
+            <a href="/report" class="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-4 py-2 rounded-lg font-bold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition text-sm flex items-center gap-2">
+                📄 Daily Report
+            </a>
+            
+            <button onclick="toggleChat()" class="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-300 px-4 py-2 rounded-lg font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition text-sm flex items-center gap-2 shadow-sm">
+                🤖 AI HealthBot
+            </button>
+
+            <a href="/profile" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition text-sm">
+                ⚙️ Profile
+            </a>
+            <a href="/add" class="bg-emerald-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-emerald-700 transition shadow text-sm">
+                + Track
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Net Cals</p>
+            <p class="text-2xl font-bold text-emerald-600">{{ net }}</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Streak</p>
+            <p class="text-2xl font-bold text-orange-500">🔥 {{ streak }}</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div class="flex justify-between">
+                <div><p class="text-[10px] font-bold text-gray-400 uppercase">Water</p><p class="text-2xl font-bold text-blue-500">{{ water_count }}/8</p></div>
+                <a href="/add_water" class="text-blue-500 font-bold text-xl">+</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">BMI</p>
+            <p class="text-2xl font-bold text-purple-600">{{ bmi }}</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Protein</p>
+            <p class="text-xl font-bold text-gray-700 dark:text-white">{{ protein }}g</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Carbs</p>
+            <p class="text-xl font-bold text-gray-700 dark:text-white">{{ carbs }}g</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-20">
+        <div class="lg:col-span-3 space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                <h3 class="text-sm font-bold text-gray-500 uppercase mb-4">Activity Log</h3>
+                <div class="h-64"><canvas id="weeklyChart"></canvas></div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                <h3 class="text-sm font-bold text-gray-500 uppercase mb-4">Weight Trend (+/- 5kg Range)</h3>
+                <div class="h-64"><canvas id="weightChart"></canvas></div>
+            </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 h-fit border border-gray-100 dark:border-gray-700">
+            <h3 class="text-sm font-bold text-gray-500 uppercase mb-4">Today's Entries</h3>
+            <div class="overflow-y-auto max-h-[500px] pr-2">
+                {% if logs|length == 0 %}
+                    <p class="text-gray-400 text-sm text-center italic py-4">No data yet.</p>
+                {% else %}
+                    <ul class="space-y-3">
+                        {% for log in logs %}
+                        <li class="flex justify-between items-center text-sm border-b border-gray-100 dark:border-gray-700 pb-2 group">
+                            <span class="text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2">
+                                <span class="text-lg">{% if log.type == 'meal' %}🍎{% elif log.type == 'water' %}💧{% else %}🏃{% endif %}</span>
+                                {{ log.name }}
+                            </span>
+                            
+                            <div class="flex items-center gap-3">
+                                <span class="text-gray-500 dark:text-gray-400 font-bold text-xs">{{ log.calories }}</span>
+                                <a href="/delete_log/{{ log._id }}" class="text-gray-300 hover:text-red-500 transition" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div id="chatBox" class="hidden fixed bottom-6 right-6 w-96 h-[500px] bg-gray-50 dark:bg-gray-900 rounded-3xl shadow-2xl flex-col border border-gray-200 dark:border-gray-800 z-50 overflow-hidden transition-all duration-300 transform origin-bottom-right">
+        <div class="bg-white dark:bg-gray-800 p-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-tr from-emerald-400 to-cyan-500 rounded-full flex items-center justify-center shadow-sm">
+                    <span class="text-xl">🤖</span>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 dark:text-white text-sm">HealthBot Coach</h3>
+                    <p class="text-xs text-emerald-500 font-medium animate-pulse">● Online</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-gray-400">
+                <button onclick="maximizeChat()" class="hover:text-gray-600 dark:hover:text-gray-200 transition p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M20.25 20.25v-4.5m0 4.5h-4.5m4.5 0L15 15M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75v4.5m0-4.5h-4.5m4.5 0L15 9" /></svg>
+                </button>
+                <button onclick="toggleChat()" class="hover:text-gray-600 dark:hover:text-gray-200 transition p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="chatMsg" class="flex-1 p-5 overflow-y-auto space-y-4 bg-gray-50 dark:bg-gray-900 scroll-smooth">
+            <div class="flex items-start gap-2.5">
+                <div class="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center flex-shrink-0">🤖</div>
+                <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-white dark:bg-gray-800 rounded-e-xl rounded-es-xl dark:border-gray-700 shadow-sm">
+                   <p class="text-sm font-normal text-gray-900 dark:text-white">👋 Hi {{ user.name }}! I'm ready to analyze your dashboard or answer any health questions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex gap-2 items-center">
+            <div class="flex-1 relative">
+                <input id="uIn" type="text" class="w-full bg-gray-100 dark:bg-gray-700/50 pl-5 pr-10 py-3 rounded-full outline-none text-sm text-gray-800 dark:text-white focus:ring-2 focus:ring-emerald-500/50 transition" placeholder="Type your message..." onkeypress="if(event.key==='Enter') send()">
+            </div>
+            <button onclick="send()" class="bg-emerald-500 hover:bg-emerald-600 text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md transition transform hover:scale-105 active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-0.5"><path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" /></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- A. GREETING & TIPS ---
+    const h = new Date().getHours();
+    let t = "", g = "", i = "";
+    if(h<11){ g="Breakfast Tip"; i="☕"; t="High protein (eggs/yogurt) keeps you full longer."; }
+    else if(h<15){ g="Lunch Advice"; i="🥗"; t="Include fiber! Add a salad or greens to your meal."; }
+    else if(h<19){ g="Evening Snack"; i="🍏"; t="Craving sugar? Try a piece of fruit or nuts first."; }
+    else { g="Dinner Time"; i="🌙"; t="Keep it light. Avoid heavy carbs 2 hours before bed."; }
+    document.getElementById('time-greeting').innerText = g;
+    document.getElementById('time-icon').innerText = i;
+    document.getElementById('smart-tip').innerText = t;
+
+    // --- B. CHARTS LOGIC ---
+    Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#9ca3af' : '#374151';
+    Chart.defaults.borderColor = document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb';
+
+    new Chart(document.getElementById('weeklyChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ dates_label | tojson }},
+            datasets: [
+                { label: 'In', data: {{ intake_data | tojson }}, backgroundColor: '#10b981', borderRadius: 4 },
+                { label: 'Out', data: {{ burned_data | tojson }}, backgroundColor: '#f97316', borderRadius: 4 }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' } } } }
+    });
+
+    new Chart(document.getElementById('weightChart'), {
+        type: 'line',
+        data: {
+            labels: {{ weight_dates | tojson }},
+            datasets: [{ 
+                label: 'Weight (kg)', 
+                data: {{ weight_values | tojson }}, 
+                borderColor: '#8b5cf6', 
+                backgroundColor: 'rgba(139, 92, 246, 0.1)', 
+                fill: true, tension: 0.4,
+                pointBackgroundColor: '#8b5cf6'
+            }]
+        },
+        options: { 
+            responsive: true, maintainAspectRatio: false,
+            scales: { x: { grid: { display: false } }, y: { min: {{ min_weight }}, max: {{ max_weight }}, grid: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' } } } 
+        }
+    });
+
+    // --- C. CHATBOT LOGIC ---
+    function toggleChat() {
+        const chat = document.getElementById('chatBox');
+        if (chat.classList.contains('hidden')) {
+            chat.classList.remove('hidden');
+            chat.classList.add('flex');
+            setTimeout(() => { chat.classList.remove('scale-95', 'opacity-0'); chat.classList.add('scale-100', 'opacity-100'); }, 10);
+            document.getElementById('uIn').focus();
+        } else {
+            chat.classList.remove('scale-100', 'opacity-100');
+            chat.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { chat.classList.remove('flex'); chat.classList.add('hidden'); }, 300);
+        }
+    }
+
+    function maximizeChat() {
+        const chat = document.getElementById('chatBox');
+        chat.classList.toggle('w-96'); chat.classList.toggle('h-[500px]');
+        chat.classList.toggle('bottom-6'); chat.classList.toggle('right-6');
+        chat.classList.toggle('inset-0'); chat.classList.toggle('w-full'); chat.classList.toggle('h-full'); chat.classList.toggle('rounded-3xl'); chat.classList.toggle('m-4');
+    }
+
+    async function send(){
+        let i=document.getElementById('uIn'), m=document.getElementById('chatMsg'), v=i.value.trim();
+        if(!v)return;
+        
+        m.innerHTML += `
+        <div class="flex justify-end mb-4">
+            <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-emerald-200 bg-emerald-500 text-white rounded-s-xl rounded-ee-xl shadow-sm">
+                <p class="text-sm font-medium">${v}</p>
+            </div>
+        </div>`;
+        i.value=''; m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+
+        let loadingId = 'load-'+Date.now();
+        m.innerHTML += `
+        <div id="${loadingId}" class="flex items-start gap-2.5 mb-4 animate-pulse">
+            <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">🤖</div>
+            <div class="flex flex-col w-full max-w-[100px] p-4 bg-white dark:bg-gray-800 rounded-e-xl rounded-es-xl shadow-sm">
+                 <div class="flex gap-1"><div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-.3s]"></div><div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-.5s]"></div></div>
+            </div>
+        </div>`;
+        m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+
+        try{
+            let r=await fetch('/chat_api',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:v})});
+            let d=await r.json();
+            document.getElementById(loadingId).remove();
+            m.innerHTML += `
+            <div class="flex items-start gap-2.5 mb-4">
+                <div class="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center flex-shrink-0 text-sm">🤖</div>
+                <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-white dark:bg-gray-800 rounded-e-xl rounded-es-xl dark:border-gray-700 shadow-sm">
+                   <p class="text-sm font-normal text-gray-900 dark:text-white">${d.reply}</p>
+                </div>
+            </div>`;
+        }catch{ 
+            document.getElementById(loadingId).remove();
+            m.innerHTML += `<div class="text-center text-xs text-red-400 mt-2 mb-4">Connection failed. Try again.</div>`; 
+        }
+        m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+    }
+</script>
+{% endblock %}

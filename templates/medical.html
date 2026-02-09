@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+    <div class="text-center mb-6">
+        <span class="text-4xl">🩺</span>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white mt-2">Medical Report AI</h1>
+        <p class="text-gray-500 text-sm">Upload a blood test or lab report to get instant dietary advice.</p>
+    </div>
+
+    <label class="block w-full h-40 border-2 border-dashed border-blue-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-700 transition">
+        <span class="text-3xl mb-2">📄</span>
+        <span class="text-sm font-bold text-blue-500">Click to Upload Report</span>
+        <input type="file" class="hidden" onchange="analyzeReport(this)">
+    </label>
+
+    <div id="resultArea" class="hidden mt-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-sm text-gray-700 dark:text-gray-300 space-y-2">
+        </div>
+</div>
+
+<script>
+async function analyzeReport(input) {
+    if(!input.files[0]) return;
+    const resDiv = document.getElementById('resultArea');
+    resDiv.classList.remove('hidden');
+    resDiv.innerHTML = "<p class='animate-pulse'>🔍 AI is reading your report...</p>";
+    
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    
+    const res = await fetch('/analyze_lab', {method:'POST', body:formData});
+    const data = await res.json();
+    resDiv.innerHTML = data.result || "Error reading file.";
+}
+</script>
+{% endblock %}

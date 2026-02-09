@@ -1,0 +1,217 @@
+name,serving_size,calories,protein,carbs,fat
+Roti (Wheat Chapati),1 piece,85,3,15,1
+Rice (Steamed White),1 cup (150g),200,4,45,0
+Dal Tadka,1 bowl (150g),180,9,20,8
+Dal Makhani,1 bowl (150g),300,10,25,18
+Paneer Butter Masala,1 bowl (150g),350,12,15,28
+Palak Paneer,1 bowl (150g),280,14,10,22
+Chana Masala,1 bowl (150g),220,10,30,8
+Aloo Gobi,1 bowl (150g),160,3,25,6
+Bhindi Masala,1 bowl (150g),140,3,15,8
+Vegetable Biryani,1 plate (300g),350,8,60,10
+Chicken Biryani,1 plate (300g),450,25,50,15
+Butter Chicken,1 bowl (200g),450,25,12,30
+Tandoori Chicken,1 leg piece,220,28,2,11
+Chicken Curry (Home Style),1 bowl (200g),280,22,8,18
+Fish Curry,1 bowl (200g),260,20,6,16
+Egg Curry,1 bowl (200g),210,14,6,15
+Idli,1 piece,40,2,8,0
+Plain Dosa,1 medium,130,3,22,4
+Masala Dosa,1 medium,350,6,45,16
+Sambar,1 bowl (150g),120,6,18,2
+Coconut Chutney,1 tbsp,45,1,2,4
+Medu Vada,1 piece,140,4,15,8
+Upma,1 cup,200,5,30,8
+Poha,1 cup,250,4,45,8
+Aloo Paratha,1 piece,280,5,35,12
+Gobhi Paratha,1 piece,260,6,32,10
+Puri Bhaji,1 plate,400,6,50,20
+Samosa,1 piece,260,4,30,16
+Pakora (Onion),3 pieces,180,3,15,12
+Vada Pav,1 piece,300,6,40,14
+Pav Bhaji,1 plate,450,10,60,18
+Chole Bhature,1 plate,550,16,70,24
+Rajma Chawal,1 plate,400,14,65,8
+Kadhi Chawal,1 plate,380,10,60,12
+Khichdi,1 bowl,220,6,35,5
+Curd Rice,1 bowl,240,6,30,10
+Dhokla,2 pieces,150,4,20,6
+Thepla,1 piece,110,3,18,4
+Gulab Jamun,1 piece,150,2,25,6
+Rasgulla,1 piece,120,2,28,1
+Jalebi,3 pieces,250,2,45,10
+Kheer (Rice),1 bowl,280,6,35,12
+Gajar Ka Halwa,1 bowl,350,4,45,18
+Lassi (Sweet),1 glass,280,8,40,10
+Masala Chai (with Sugar),1 cup,80,2,12,3
+Coffee (Milk & Sugar),1 cup,90,3,12,4
+Toned Milk,1 glass (240ml),140,8,12,6
+Full Cream Milk,1 glass (240ml),190,8,12,11
+Curd (Yogurt),1 cup (150g),100,5,6,6
+Buttermilk (Chaas),1 glass,40,2,4,1
+Banana,1 medium,105,1,27,0
+Mango,1 medium,150,2,38,0
+Papaya,1 bowl,60,1,15,0
+Apple,1 medium,95,0,25,0
+Almonds,10 pieces,70,3,3,6
+Walnuts,2 whole,50,2,2,5
+Oats (Masala),1 bowl,220,8,35,5
+Maggi Noodles,1 pack,310,6,40,14
+Sandwich (Veg Grilled),1 piece,220,6,30,8
+Pizza (Veg Cheese),1 slice,280,10,32,12
+Plain Naan,1 piece,260,8,45,5
+Butter Naan,1 piece,320,8,45,12
+Garlic Naan,1 piece,330,9,46,13
+Missi Roti,1 piece,160,6,25,4
+Methi Paratha,1 piece,180,5,30,6
+Paneer Paratha,1 piece,320,12,35,16
+Makki Ki Roti,1 piece,150,3,25,5
+Sarson Ka Saag,1 bowl (150g),220,6,15,16
+Jeera Rice,1 bowl,240,4,48,6
+Matar Pulao,1 plate,320,6,55,8
+Lemon Rice,1 bowl,260,5,40,10
+Tamarind Rice,1 bowl,280,5,42,12
+Moong Dal (Yellow),1 bowl,150,10,22,2
+Masoor Dal,1 bowl,160,11,24,3
+Malai Kofta,1 bowl (200g),400,8,30,28
+Baingan Bharta,1 bowl,120,3,15,6
+Dum Aloo,1 bowl,280,4,35,14
+Mushroom Matar,1 bowl,180,8,15,10
+Mutton Rogan Josh,1 bowl (200g),450,28,10,32
+Mutton Biryani,1 plate,600,30,70,25
+Chicken Tikka Masala,1 bowl,380,26,12,24
+Fish Fry,2 pieces,250,22,5,15
+Prawn Curry,1 bowl,280,24,8,16
+Egg Bhurji,2 eggs,260,14,4,20
+Omelette (Masala),2 eggs,280,14,5,22
+Chicken Momos (Steamed),6 pieces,240,16,30,6
+Veg Momos (Steamed),6 pieces,180,4,35,3
+Uttapam (Onion),1 piece,220,6,40,6
+Rava Dosa,1 piece,200,4,38,6
+Ven Pongal,1 bowl,280,8,45,10
+Appam,1 piece,90,1,18,2
+Veg Stew,1 bowl,180,3,15,12
+Pesarattu,1 piece,240,10,35,6
+Pani Puri,6 pieces,120,2,24,3
+Bhel Puri,1 plate,250,6,45,8
+Sev Puri,1 plate,300,5,40,14
+Dahi Vada,2 pieces,350,10,40,18
+Kachori (Moong Dal),1 piece,280,5,30,16
+Aloo Tikki,2 pieces,260,4,35,12
+Sabudana Khichdi,1 bowl,350,2,60,12
+Besan Chilla,1 piece,160,8,20,5
+Sprouts Salad,1 bowl,100,8,16,1
+Tomato Soup,1 bowl,90,2,12,4
+Sweet Corn Soup,1 bowl,110,2,20,3
+Kaju Katli,2 pieces,160,3,20,9
+Besan Ladoo,1 piece,220,4,25,12
+Motichoor Ladoo,1 piece,180,2,28,9
+Moong Dal Halwa,1 bowl,400,8,45,22
+Sooji Halwa (Sheera),1 bowl,320,4,50,14
+Kulfi (Malai),1 stick,220,6,22,12
+Fruit Salad,1 bowl,120,2,28,0
+Coconut Water,1 glass,30,1,8,0
+Sugarcane Juice,1 glass,180,0,45,0
+Jaljeera,1 glass,20,0,5,0
+Thandai,1 glass,250,6,35,10
+Badam Milk,1 glass,280,8,30,14
+Green Tea,1 cup,5,0,1,0
+Peanut Masala,1 small bowl,220,9,10,16
+Papad (Roasted),1 piece,35,2,6,0
+Veg Hakka Noodles,1 plate,350,8,60,10
+Chicken Hakka Noodles,1 plate,400,18,55,12
+Schezwan Noodles (Veg),1 plate,380,8,62,12
+Schezwan Noodles (Chicken),1 plate,420,20,58,14
+Egg Noodles,1 plate,380,14,55,12
+Veg Fried Rice,1 plate,320,6,65,8
+Chicken Fried Rice,1 plate,380,18,60,10
+Schezwan Fried Rice,1 plate,350,6,68,10
+Triple Schezwan Rice,1 plate,600,20,80,25
+Veg Manchurian (Dry),6 pieces,250,4,30,14
+Veg Manchurian (Gravy),1 bowl,300,5,35,16
+Gobi Manchurian,1 plate,280,4,32,15
+Chilli Paneer (Dry),1 plate,320,12,25,18
+Chilli Paneer (Gravy),1 bowl,350,14,28,20
+Chilli Chicken (Dry),1 plate,380,28,15,18
+Chicken Lollipop,4 pieces,400,30,10,25
+Spring Rolls (Veg),2 pieces,220,4,25,12
+Veg Momos (Fried),6 pieces,260,5,35,12
+Chicken Momos (Fried),6 pieces,320,15,30,16
+Paneer Momos (Steamed),6 pieces,240,10,32,8
+Tandoori Momos (Veg),6 pieces,280,6,35,12
+Tandoori Momos (Chicken),6 pieces,340,18,30,16
+Manchow Soup,1 bowl,120,3,15,5
+Hot & Sour Soup,1 bowl,110,4,12,5
+Sweet Corn Chicken Soup,1 bowl,140,10,15,4
+Margherita Pizza,1 regular (6 inch),600,18,70,22
+Farmhouse Pizza,1 regular (6 inch),700,20,75,25
+Peppy Paneer Pizza,1 regular (6 inch),750,24,70,30
+Chicken Tikka Pizza,1 regular (6 inch),800,35,65,30
+Pepperoni Pizza,1 regular (6 inch),850,30,60,40
+Cheese Burst Pizza,1 slice,350,10,30,18
+Garlic Breadsticks,4 pieces,280,6,35,14
+Stuffed Garlic Bread,2 pieces,320,10,30,16
+Red Sauce Pasta (Arrabbiata),1 bowl,350,10,60,8
+White Sauce Pasta (Alfredo),1 bowl,450,12,50,22
+Pink Sauce Pasta,1 bowl,400,11,55,15
+Spaghetti Aglio Olio,1 bowl,320,8,50,12
+Macaroni and Cheese,1 bowl,480,14,55,24
+Lasagna (Veg),1 portion,550,18,45,30
+Lasagna (Chicken),1 portion,650,35,40,32
+Risotto (Mushroom),1 bowl,400,10,50,18
+Veggie Burger,1 piece,350,10,45,15
+Aloo Tikki Burger,1 piece,380,8,55,16
+Chicken Burger (Grilled),1 piece,320,25,30,12
+Crispy Chicken Burger,1 piece,450,20,50,22
+Double Cheese Burger,1 piece,550,25,40,30
+French Fries (Medium),1 serving,320,4,40,16
+Peri Peri Fries,1 serving,340,4,42,16
+Potato Wedges,1 serving,280,3,35,12
+Grilled Cheese Sandwich,1 piece,300,10,30,16
+Veg Club Sandwich,1 piece,280,8,35,12
+Chicken Club Sandwich,1 piece,350,22,30,15
+Paneer Tikka Sandwich,1 piece,320,14,35,14
+Bombay Masala Toast,1 piece,260,6,38,10
+Sub/Hoagie (Veg 6 inch),1 piece,350,12,50,8
+Sub/Hoagie (Chicken 6 inch),1 piece,400,24,45,10
+Hot Dog (Chicken),1 piece,300,12,25,16
+Chicken Nuggets,6 pieces,280,14,16,18
+Hash Browns,2 pieces,260,2,25,16
+Veg Kathy Roll,1 roll,300,8,40,12
+Paneer Roll,1 roll,350,14,35,16
+Chicken Kathy Roll,1 roll,400,22,35,18
+Double Egg Roll,1 roll,380,16,30,20
+Shawarma (Chicken),1 roll,450,28,30,22
+Falafel Wrap,1 roll,350,10,45,14
+Hummus with Pita,1 serving,300,8,40,12
+Taco (Veg),1 piece,200,6,22,10
+Taco (Chicken),1 piece,240,12,20,12
+Burrito Bowl (Veg),1 bowl,450,12,65,15
+Nachos with Cheese,1 plate,380,6,40,22
+Nachos with Salsa,1 plate,300,4,45,12
+Quesadilla (Cheese),1 piece,350,14,30,20
+Croissant (Butter),1 piece,240,4,26,14
+Chocolate Croissant,1 piece,300,5,35,16
+Blueberry Muffin,1 piece,280,4,38,12
+Bagel with Cream Cheese,1 piece,320,8,45,10
+Chocolate Brownie,1 piece,250,3,35,12
+Brownie with Ice Cream,1 serving,400,6,50,20
+Chocolate Truffle Cake,1 slice,350,4,45,18
+Red Velvet Cake,1 slice,380,3,48,20
+Cheesecake (Slice),1 piece,400,6,30,28
+Apple Pie,1 slice,300,2,45,12
+Waffle with Chocolate,1 piece,450,6,60,20
+Pancakes with Syrup,2 pieces,350,6,65,8
+Donut (Glazed),1 piece,200,2,25,10
+Donut (Chocolate),1 piece,280,3,35,14
+Tiramisu,1 serving,350,5,30,22
+Cappuccino,1 cup,120,6,10,6
+Latte,1 cup,150,8,12,8
+Mocha,1 cup,250,8,30,10
+Hot Chocolate,1 cup,300,6,40,12
+Iced Coffee,1 glass,200,4,25,8
+Cold Coffee with Ice Cream,1 glass,350,6,40,18
+Iced Tea (Lemon),1 glass,120,0,30,0
+Oreo Shake,1 glass,450,8,60,20
+Mango Milkshake,1 glass,300,6,45,10
+Banana Smoothie,1 glass,250,4,40,5

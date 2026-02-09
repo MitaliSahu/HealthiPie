@@ -1,0 +1,26 @@
+name,calories,category
+Running (Jogging),240,Cardio
+Running (Sprint),375,Cardio
+Walking (Brisk),130,Cardio
+Cycling (Moderate),210,Cardio
+Cycling (Intense),300,Cardio
+Jump Rope,350,Cardio
+Swimming (Laps),250,Cardio
+Yoga (Hatha),100,Flexibility
+Pilates,120,Flexibility
+Gym: Bench Press,150,Strength
+Gym: Squats,175,Strength
+Gym: Deadlift,200,Strength
+Gym: Bicep Curls,80,Strength
+HIIT Circuit,300,Cardio
+Zumba,220,Cardio
+Boxing,280,Cardio
+Basketball,270,Sports
+Football,290,Sports
+Badminton,170,Sports
+Cricket,180,Sports
+Dancing,160,Activity
+House Cleaning,80,Activity
+Stair Climber,220,Cardio
+Elliptical,215,Cardio
+Rowing Machine,250,Cardio

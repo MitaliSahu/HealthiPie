@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12">
+
+    <div class="text-center mb-16">
+        <div class="inline-block bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-4">
+            All Features Unlocked
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
+            About <span class="text-emerald-500">HealthiPie</span>
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Welcome to your complete health ecosystem. Below is a guide to all the powerful features integrated into this application to help you reach your goals.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition group">
+            <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">🏠</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Home</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-4 text-sm">
+                The landing page that welcomes you. It serves as the entry point to the application.
+            </p>
+            <a href="{{ url_for('home') }}" class="text-emerald-600 font-bold text-sm hover:underline">Go Home &rarr;</a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition group">
+            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">📊</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Dashboard</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-4 text-sm">
+                Your daily command center. Track net calories, water intake, protein, BMI, and view your daily streak.
+            </p>
+            <a href="{{ url_for('dashboard') }}" class="text-emerald-600 font-bold text-sm hover:underline">Open Dashboard &rarr;</a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition group">
+            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">⚖️</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Weight Journey</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-4 text-sm">
+                Visual charts that track your weight fluctuations over time to help you stay on target with your goals.
+            </p>
+            <a href="{{ url_for('dashboard') }}" class="text-emerald-600 font-bold text-sm hover:underline">View Charts &rarr;</a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition group">
+            <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">🤖</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">AI HealthBot</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-4 text-sm">
+                Powered by Google Gemini. Ask for diet tips, workout advice, or analyze your dashboard stats instantly.
+            </p>
+            <button onclick="window.location.href='{{ url_for('dashboard') }}'" class="text-emerald-600 font-bold text-sm hover:underline">Chat Now &rarr;</button>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition group">
+            <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">📄</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Track Report</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-4 text-sm">
+                Detailed breakdowns of your meals and workouts for any specific date. See your macros in detail.
+            </p>
+            <a href="{{ url_for('report_view') }}" class="text-emerald-600 font-bold text-sm hover:underline">Get Report &rarr;</a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition group">
+            <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/50 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">⚙️</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Profile</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-4 text-sm">
+                Manage your personal data (Height, Weight, Age, Goals). Updating this keeps the AI recommendations accurate.
+            </p>
+            <a href="{{ url_for('profile') }}" class="text-emerald-600 font-bold text-sm hover:underline">Edit Profile &rarr;</a>
+        </div>
+    </div>
+
+    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+            
+            <div class="flex-1 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+                    <span class="text-2xl">🌗</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Themes & UI</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Fully responsive design with built-in <strong>Dark Mode</strong> and <strong>Light Mode</strong>. 
+                    The application remembers your preference automatically using local storage.
+                </p>
+                <button onclick="toggleTheme()" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    Try Toggle Theme
+                </button>
+            </div>
+
+            <div class="hidden md:block w-px h-32 bg-gray-300 dark:bg-gray-600"></div>
+
+            <div class="flex-1 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+                    <span class="text-2xl">🔐</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Secure Access</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Complete authentication system including <strong>Register</strong>, <strong>Login</strong>, and <strong>Logout</strong> functionalities to keep your health data private and secure.
+                </p>
+                <div class="flex gap-3 justify-center md:justify-start">
+                    {% if session.get('username') %}
+                        <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">Login</a>
+                        <a href="{{ url_for('register') }}" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-bold transition">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

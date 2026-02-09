@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full space-y-8 bg-white dark:bg-gray-800 p-10 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 relative overflow-hidden transition-colors duration-300">
+        <div class="flex flex-col items-center justify-center relative z-10">
+            <div class="h-24 w-24 rounded-full bg-gradient-to-tr from-emerald-400 to-blue-500 p-1 shadow-lg mb-4">
+                <div class="h-full w-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-3xl">👤</div>
+            </div>
+            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Edit Profile</h2>
+        </div>
+
+        <form class="mt-8 space-y-6 relative z-10" method="POST">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">Full Name</label>
+                    <input name="name" type="text" required value="{{ user.name }}" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Age</label>
+                        <input name="age" type="number" required value="{{ user.age }}" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl">
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Height</label>
+                            <div class="flex bg-gray-200 dark:bg-gray-700 rounded-lg p-0.5">
+                                <button type="button" onclick="setUnit('cm')" id="btn-cm" class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-white dark:bg-gray-600 shadow-sm text-emerald-600 dark:text-emerald-400">CM</button>
+                                <button type="button" onclick="setUnit('ft')" id="btn-ft" class="px-2 py-0.5 text-[10px] font-bold rounded-md text-gray-500 dark:text-gray-400">FT</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="height" id="real_height" value="{{ user.height }}">
+                        <div id="input-cm" class="block">
+                            <input type="number" id="vis_cm" value="{{ user.height }}" oninput="syncFromCm()" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl">
+                        </div>
+                        <div id="input-ft" class="hidden flex gap-2">
+                            <input type="number" id="vis_ft" placeholder="Ft" oninput="syncFromFt()" class="block w-1/2 px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl">
+                            <input type="number" id="vis_in" placeholder="In" oninput="syncFromFt()" class="block w-1/2 px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Weight (kg)</label>
+                        <input name="weight" type="number" required value="{{ user.weight }}" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Goal</label>
+                    <select name="goal" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl">
+                        <option value="Lose Weight" {% if user.goal == 'Lose Weight' %}selected{% endif %}>📉 Lose Weight</option>
+                        <option value="Maintain" {% if user.goal == 'Maintain' %}selected{% endif %}>⚖️ Maintain Weight</option>
+                        <option value="Gain Muscle" {% if user.goal == 'Gain Muscle' %}selected{% endif %}>💪 Gain Muscle</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex gap-4 pt-4">
+                <a href="/dashboard" class="w-1/3 flex justify-center py-3 px-4 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Cancel</a>
+                <button type="submit" class="w-2/3 flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function setUnit(u) {
+        document.getElementById('input-cm').classList.toggle('hidden', u!=='cm');
+        document.getElementById('input-ft').classList.toggle('hidden', u!=='ft');
+        document.getElementById('input-ft').classList.toggle('flex', u==='ft');
+        document.getElementById('btn-cm').classList.toggle('bg-white', u==='cm');
+        document.getElementById('btn-ft').classList.toggle('bg-white', u==='ft');
+    }
+    function syncFromCm() { 
+        let cm = document.getElementById('vis_cm').value;
+        document.getElementById('real_height').value = Math.round(cm);
+    }
+    function syncFromFt() {
+        let ft = parseFloat(document.getElementById('vis_ft').value)||0, inc = parseFloat(document.getElementById('vis_in').value)||0;
+        let cm = Math.round(((ft*12)+inc)*2.54);
+        document.getElementById('real_height').value = cm;
+        document.getElementById('vis_cm').value = cm;
+    }
+    // Init
+    let h = document.getElementById('real_height').value;
+    document.getElementById('vis_ft').value = Math.floor((h*0.3937)/12);
+    document.getElementById('vis_in').value = Math.round(((h*0.3937)/12 - Math.floor((h*0.3937)/12))*12);
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+    <div class="text-center mb-6">
+        <span class="text-4xl">🥦</span>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white mt-2">Clear the Fridge</h1>
+        <p class="text-gray-500 text-sm">Enter ingredients you have, and AI will create a recipe.</p>
+    </div>
+
+    <textarea id="ingredients" class="w-full p-4 rounded-xl bg-gray-100 dark:bg-gray-700 border-none outline-none focus:ring-2 focus:ring-orange-500" rows="3" placeholder="e.g. 2 eggs, tomato, stale bread..."></textarea>
+    
+    <button onclick="getRecipe()" class="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition shadow-md">
+        👨‍🍳 Create Recipe
+    </button>
+
+    <div id="recipeArea" class="hidden mt-6 p-4 bg-orange-50 dark:bg-orange-900/30 rounded-xl text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line"></div>
+</div>
+
+<script>
+async function getRecipe() {
+    const ing = document.getElementById('ingredients').value;
+    if(!ing) return alert("Please enter ingredients!");
+    
+    const resDiv = document.getElementById('recipeArea');
+    resDiv.classList.remove('hidden');
+    resDiv.innerHTML = "<p class='animate-pulse'>🍳 Cooking up ideas...</p>";
+    
+    const res = await fetch('/clear_fridge', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ingredients: ing})
+    });
+    const data = await res.json();
+    resDiv.innerText = data.reply;
+}
+</script>
+{% endblock %}
