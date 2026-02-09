@@ -23,17 +23,12 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 # --- 🛠️ SIMPLE AI MODEL SETUP ---
 model = genai.GenerativeModel('gemini-flash-latest')
 
-# --- DATABASE ---
-try:
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['healthify_db']
-    logs_collection = db['daily_logs']
-    users_collection = db['users']
-    weight_collection = db['weight_history']
-    workouts_collection = db['workouts']
-    food_collection = db['food_items']
-except:
-    print("⚠️ MongoDB Connection Failed.")
+# Add these lines right here! They fix the red errors below.
+logs_collection = db['daily_logs']
+users_collection = db['users']
+weight_collection = db['weight_history']
+workouts_collection = db['workouts']
+food_collection = db['food_items']
 
 # --- HELPER ---
 def calculate_streak(username):
