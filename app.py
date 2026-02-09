@@ -11,6 +11,10 @@ import requests # For Barcode API
 app = Flask(__name__)
 app.secret_key = "super_secret_healthify_key"
 
+# This tells your app to look for the 'MONGO_URI' we just added to Render!
+client = MongoClient(os.environ.get("MONGO_URI", "mongodb://localhost:27017/healthify_db"))
+db = client.get_database()
+
 # --- 🔑 GEMINI AI CONFIGURATION ---
 os.environ["GEMINI_API_KEY"] = "AIzaSyDMbUGjb6EBhA0b6BB8NGK9qloIexqO1T0"
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
