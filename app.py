@@ -20,8 +20,8 @@ client = MongoClient(MONGO_URI)
 db = client["healthipie"] # Explicitly naming the database fixes the ConfigError
 
 # --- 🔑 GEMINI AI CONFIGURATION ---
-"GEMINI_API_KEY"= os.environ.get("GEMINI_API_KEY")
-genai.configure(api_key="GEMINI_API_KEY")
+GEMINI_API_KEY=os.environ.get("GEMINI_API_KEY")
+genai.configure(api_key=GEMINI_API_KEY)
 
 # --- 🛠️ SIMPLE AI MODEL SETUP ---
 model = genai.GenerativeModel('gemini-flash-latest')
