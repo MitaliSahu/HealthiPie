@@ -131,9 +131,23 @@
         document.getElementById('dropdownSection').classList.toggle('hidden', inputMethod==='manual');
         document.getElementById('manualSection').classList.toggle('hidden', inputMethod==='dropdown');
         document.getElementById('itemName').readOnly = (inputMethod==='dropdown');
-        // Reset
+        // 🧹 RESET ALL FIELDS (Complete Cleanup)
         document.getElementById('itemName').value = '';
         document.getElementById('itemCalories').value = '';
+        document.getElementById('itemCategory').value = '-'; // Category reset
+        
+        if (document.getElementById('manualInput')) {
+            document.getElementById('manualInput').value = ''; // AI search box reset
+        }
+        
+        // Dropdowns ko bhi wapas "-- Select --" par set kar do
+        document.getElementById('foodSelect').value = '';
+        document.getElementById('workoutSelect').value = '';
+        
+        // Macros ko wapas 0 kar do
+        document.getElementById('valProtein').value = '0';
+        document.getElementById('valCarbs').value = '0';
+        document.getElementById('valFat').value = '0';
         setMode(mode); 
     }
 
@@ -148,10 +162,7 @@
     function fillFormFields(data) {
         document.getElementById('itemName').value = data.name || "Unknown";
         document.getElementById('itemCalories').value = data.calories || 0;
-        document.getElementById('itemCategory').value = data.category || 'General';
-        
-        // Switch to Manual Mode so user sees the text
-        if(inputMethod === 'dropdown') toggleInputMode(); 
+        document.getElementById('itemCategory').value = data.category || 'General'; 
 
         if(mode === 'meal') {
             document.getElementById('valProtein').value = data.protein || 0;

@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
         <div class="lg:col-span-3 space-y-6">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                 <h3 class="text-sm font-bold text-gray-500 uppercase mb-4">Activity Log</h3>
@@ -90,20 +90,36 @@
                 {% else %}
                     <ul class="space-y-3">
                         {% for log in logs %}
-                        <li class="flex justify-between items-center text-sm border-b border-gray-100 dark:border-gray-700 pb-2 group">
-                            <span class="text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2">
-                                <span class="text-lg">{% if log.type == 'meal' %}🍎{% elif log.type == 'water' %}💧{% else %}🏃{% endif %}</span>
-                                {{ log.name }}
-                            </span>
+                        <li class="flex flex-col text-sm border-b border-gray-100 dark:border-gray-700 pb-2 group">
                             
-                            <div class="flex items-center gap-3">
-                                <span class="text-gray-500 dark:text-gray-400 font-bold text-xs">{{ log.calories }}</span>
-                                <a href="/delete_log/{{ log._id }}" class="text-gray-300 hover:text-red-500 transition" title="Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                    </svg>
-                                </a>
+                            <div onclick="toggleLogDetails('log-{{ loop.index }}')" class="flex justify-between items-center cursor-pointer w-full">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2">
+                                    <span class="text-lg">{% if log.type == 'meal' %}🍎{% elif log.type == 'water' %}💧{% else %}🏃{% endif %}</span>
+                                    {{ log.name }}
+                                </span>
+                                
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold text-xs">{{ log.calories }} kcal</span>
+                                    <a href="/delete_log/{{ log._id }}" class="text-gray-300 hover:text-red-500 transition" title="Delete" onclick="event.stopPropagation();">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
+
+                            <div id="log-{{ loop.index }}" class="hidden mt-2 ml-8 text-[11px] text-gray-500 dark:text-gray-400 flex gap-4">
+                                {% if log.type == 'meal' %}
+                                    <span><b class="text-blue-500">P:</b> {{ log.protein }}g</span>
+                                    <span><b class="text-yellow-500">C:</b> {{ log.carbs }}g</span>
+                                    <span><b class="text-red-500">F:</b> {{ log.fat }}g</span>
+                                {% elif log.type == 'workout' %}
+                                    <span class="text-emerald-500 font-semibold">Great workout! Keep it up! 💪</span>
+                                {% else %}
+                                    <span class="text-blue-400 font-semibold">Hydration is key! 💧</span>
+                                {% endif %}
+                            </div>
+
                         </li>
                         {% endfor %}
                     </ul>
@@ -149,6 +165,62 @@
             <button onclick="send()" class="bg-emerald-500 hover:bg-emerald-600 text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md transition transform hover:scale-105 active:scale-95">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-0.5"><path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" /></svg>
             </button>
+        </div>
+    </div>
+</div>
+{% set weight = user.weight | default(60) | float %}
+{% set base_cals = (weight * 24 * 1.3) | int %}
+
+{% if 'gain' in user.goal|default('')|lower %}
+    {% set target_cals = base_cals + 300 %}
+    {% set target_protein = (weight * 2.0) | int %}
+{% elif 'loss' in user.goal|default('')|lower %}
+    {% set target_cals = base_cals - 300 %}
+    {% set target_protein = (weight * 1.8) | int %}
+{% else %}
+    {% set target_cals = base_cals %}
+    {% set target_protein = (weight * 1.5) | int %}
+{% endif %}
+
+{% set target_fat = ((target_cals * 0.25) / 9) | int %}
+{% set target_carbs = ((target_cals - (target_protein * 4) - (target_fat * 9)) / 4) | int %}
+
+<div class="mt-1 mb-8 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+
+    <div class="relative z-10">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="text-2xl">✨</span>
+            <h2 class="text-lg font-bold text-gray-800 dark:text-white">Your Daily Fuel Guide</h2>
+        </div>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mb-5 leading-relaxed">
+            Based on your BMI (<b class="text-emerald-500">{{ bmi }}</b>) and goal (<b class="text-emerald-500">{{ user.goal|default('Maintain') }}</b>), here is your tailored target:
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-emerald-50 dark:bg-emerald-900/30 rounded-xl p-4 text-center border border-emerald-100 dark:border-emerald-800/50 transition hover:shadow-md">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400 mb-1">Calories</p>
+                <p class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">{{ target_cals }}</p>
+            </div>
+            <div class="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-4 text-center border border-blue-100 dark:border-blue-800/50 transition hover:shadow-md">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400 mb-1">Protein</p>
+                <p class="text-2xl font-extrabold text-blue-700 dark:text-blue-300">{{ target_protein }}g</p>
+            </div>
+            <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-xl p-4 text-center border border-yellow-100 dark:border-yellow-800/50 transition hover:shadow-md">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-yellow-600 dark:text-yellow-400 mb-1">Carbs</p>
+                <p class="text-2xl font-extrabold text-yellow-700 dark:text-yellow-300">{{ target_carbs }}g</p>
+            </div>
+            <div class="bg-red-50 dark:bg-red-900/30 rounded-xl p-4 text-center border border-red-100 dark:border-red-800/50 transition hover:shadow-md">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-red-600 dark:text-red-400 mb-1">Fat</p>
+                <p class="text-2xl font-extrabold text-red-700 dark:text-red-300">{{ target_fat }}g</p>
+            </div>
+        </div>
+
+        <div class="mt-4 flex items-start sm:items-center gap-3 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg p-3 text-sm border border-cyan-100 dark:border-cyan-800/50">
+            <span class="text-xl">💧</span>
+            <p class="font-medium text-cyan-800 dark:text-cyan-300">
+                <b>Hydration:</b> Drink at least <b>8-10 glasses (2.5L)</b> of water today to stay energetic and boost metabolism!
+            </p>
         </div>
     </div>
 </div>
@@ -277,6 +349,10 @@
             m.innerHTML += `<div class="text-center text-xs text-red-400 mt-2 mb-4">Connection failed. Try again.</div>`; 
         }
         m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+    }
+    // toggle log details in activity log
+    function toggleLogDetails(id) {
+        document.getElementById(id).classList.toggle('hidden');
     }
 </script>
 {% endblock %}
