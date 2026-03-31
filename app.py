@@ -318,10 +318,14 @@ def fridge_page():
     if 'username' not in session: return redirect(url_for('login'))
     return render_template('fridge.html', user=users_collection.find_one({"username": session['username']}))
 
-# --- 🆕 API: FOOD IMAGE ANALYSIS (For Tracker) ---
+# --- 🆕 API: DIRECT AI SNAP AUTO-LOGGER ---
 @app.route('/analyze_food_image', methods=['POST'])
 def analyze_food_image():
-    if 'image' not in request.files: return jsonify({"error": "No image"})
+    if 'username' not in session: 
+        return jsonify({"error": "Please login first"})
+    if 'image' not in request.files: 
+        return jsonify({"error": "No image uploaded"})
+    
     file = request.files['image']
     img_data = file.read()
     
@@ -337,11 +341,181 @@ def analyze_food_image():
     }
     """
     try:
-        vision_model = genai.GenerativeModel('gemini-1.5-flash')
+        vision_model = genai.GenerativeModel('gemini-flash-latest')
         response = vision_model.generate_content([prompt, {"mime_type": file.mimetype, "data": img_data}])
         text = response.text.replace("```json", "").replace("```", "").strip()
-        return jsonify(json.loads(text))
-    except: return jsonify({"error": "Could not identify food"})
+        data = json.loads(text)
+        
+        # 🔥 MAGIC: AI ab form bharne ke bajaye seedha MongoDB mein save karega!
+        logs_collection.insert_one({
+            "user": session['username'],
+            "type": "meal",
+            "name": data.get("name", "AI Scanned Food"),
+            "calories": data.get("calories", 0),
+            "protein": data.get("protein", 0),
+            "carbs": data.get("carbs", 0),
+            "fat": data.get("fat", 0),
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "category": "AI Snap"
+        })
+        
+        return jsonify({"success": True, "name": data.get("name")})
+    except Exception as e:
+        print(f"Snap Error: {e}")
+        return jsonify({"error": "Could not identify food."})
+# --- 🆕 API: PACKET / NUTRITION LABEL SCANNER ---
+@app.route('/analyze_packet_image', methods=['POST'])
+def analyze_packet_image():
+    if 'username' not in session: 
+        return jsonify({"error": "Please login first"})
+    if 'image' not in request.files: 
+        return jsonify({"error": "No image uploaded"})
+    
+    file = request.files['image']
+    img_data = file.read()
+    
+    # 🧠 Special prompt for packaged food
+    prompt = """
+    Read this food packet or nutrition label. 
+    Identify the Brand/Product name, and extract its nutritional values per serving (or total if it's a small pack).
+    Return ONLY raw JSON: 
+    {
+        "name": "Brand & Product Name",
+        "calories": int, 
+        "protein": int, 
+        "carbs": int, 
+        "fat": int
+    }
+    """
+    try:
+        vision_model = genai.GenerativeModel('gemini-flash-latest')
+        response = vision_model.generate_content([prompt, {"mime_type": file.mimetype, "data": img_data}])
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        data = json.loads(text)
+        
+        # Save to DB automatically
+        logs_collection.insert_one({
+            "user": session['username'],
+            "type": "meal",
+            "name": data.get("name", "Packaged Food"),
+            "calories": data.get("calories", 0),
+            "protein": data.get("protein", 0),
+            "carbs": data.get("carbs", 0),
+            "fat": data.get("fat", 0),
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "category": "Packet Snap"
+        })
+        
+        return jsonify({"success": True, "name": data.get("name")})
+    except Exception as e:
+        print(f"Packet Scan Error: {e}")
+        return jsonify({"error": "Could not read the packet details clearly."})
+# --- 🆕 API: MEDICAL LAB REPORT ANALYSIS ---
+@app.route('/analyze_lab', methods=['POST'])
+def analyze_lab():
+    if 'username' not in session: 
+        return jsonify({"result": "Please login first."})
+    if 'image' not in request.files: 
+        return jsonify({"result": "No image uploaded."})
+    
+    file = request.files['image']
+    img_data = file.read()
+    
+    # Hum AI ko strict instruction de rahe hain ki HTML mein answer de taaki website par sundar dikhe
+    prompt = """
+    You are a smart AI health and nutrition expert. 
+    Analyze this medical/blood test report. 
+    1. Give a very short summary of what is out of range (High/Low).
+    2. Give 3-4 specific dietary advices (What to eat more, what to avoid).
+    IMPORTANT: Format your response using simple HTML tags like <b>, <br>, <ul>, and <li>. Do NOT use markdown like **.
+    """
+    
+    try:
+        vision_model = genai.GenerativeModel('gemini-flash-latest')
+        response = vision_model.generate_content([prompt, {"mime_type": file.mimetype, "data": img_data}])
+        return jsonify({"result": response.text})
+    except Exception as e:
+        print(f"Lab Report Error: {e}")
+        return jsonify({"result": "<p class='text-red-500'>Sorry, AI could not read the report clearly. Try another clear image.</p>"})
+    # --- 🆕 API: CLEAR THE FRIDGE (RECIPE GENERATOR) ---
+@app.route('/clear_fridge', methods=['POST'])
+def clear_fridge():
+    if 'username' not in session: 
+        return jsonify({"reply": "Please login first."})
+    
+    data = request.json
+    ingredients = data.get('ingredients')
+    
+    if not ingredients:
+        return jsonify({"reply": "Please tell me what you have in your fridge!"})
+        
+    prompt = f"""
+    You are a creative, healthy chef. 
+    I have these ingredients in my kitchen: {ingredients}.
+    Please suggest one easy, healthy recipe I can make. 
+    Include a Title, Ingredients list, and short Steps.
+    IMPORTANT: Format your response in clean plain text with simple line breaks. Do NOT use markdown symbols like ** or #.
+    """
+    
+    try:
+        # Hum apna normal text wala model use kar rahe hain
+        response = model.generate_content(prompt)
+        return jsonify({"reply": response.text})
+    except Exception as e:
+        print(f"Recipe Error: {e}")
+        return jsonify({"reply": "Oops! The AI Chef is taking a break. Try again in a minute."})
 
+# --- 🆕 API: PROCESS VOICE INPUT (Fixed for Workout & Meal) ---
+@app.route('/process_voice', methods=['POST'])
+def process_voice():
+    data = request.json
+    text = data.get('text', '')
+    mode = data.get('mode', 'meal') # Check mode (meal or workout)
+    
+    if not text:
+        return jsonify({"error": "No voice text received"})
+        
+    if mode == 'meal':
+        prompt = f"""
+        A user just said this: '{text}'. 
+        Identify the main food item they are talking about.
+        Return ONLY raw JSON: 
+        {{
+            "name": "Food Name",
+            "calories": int, 
+            "protein": int, 
+            "carbs": int, 
+            "fat": int, 
+            "category": "Food"
+        }}
+        Do NOT use markdown.
+        """
+    else:
+        # Workout ke liye special prompt
+        prompt = f"""
+        A user just said this: '{text}'. 
+        Identify the exercise or workout. If no duration is mentioned, assume 30 minutes.
+        Return ONLY raw JSON: 
+        {{
+            "name": "Exercise Name",
+            "calories": int (estimated calories burned), 
+            "category": "Exercise"
+        }}
+        Do NOT use markdown.
+        """
+        
+    try:
+        response = model.generate_content(prompt)
+        res_text = response.text
+        start = res_text.find('{')
+        end = res_text.rfind('}') + 1
+        if start != -1 and end != -1:
+            result = json.loads(res_text[start:end])
+            return jsonify(result)
+        else:
+            return jsonify({"error": "AI could not understand the voice."})
+    except Exception as e:
+        print(f"Voice Error: {e}")
+        return jsonify({"error": "Voice processing failed."})
 if __name__ == '__main__':
     app.run(debug=True, port=5002)

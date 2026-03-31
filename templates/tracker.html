@@ -5,24 +5,20 @@
     <div class="max-w-md w-full bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Log Activity</h2>
         
-        <div class="grid grid-cols-3 gap-3 mb-8">
-            <button onclick="startVoiceFill()" class="flex flex-col items-center justify-center p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl border border-emerald-200 dark:border-emerald-700 hover:bg-emerald-100 dark:hover:bg-emerald-800 transition shadow-sm group">
-                <span class="text-2xl mb-1 group-hover:scale-110 transition">🎙️</span>
-                <span class="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase">Voice</span>
-            </button>
-
-            <label class="flex flex-col items-center justify-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-800 transition shadow-sm cursor-pointer group">
-                <span class="text-2xl mb-1 group-hover:scale-110 transition">📸</span>
-                <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300 uppercase">Snap</span>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <label class="flex flex-col items-center justify-center p-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-800 transition shadow-sm cursor-pointer group">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition">🥗</span>
+                <span class="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase">Food Snap</span>
                 <input type="file" class="hidden" capture="environment" onchange="snapFoodFill(this)">
             </label>
 
-            <button onclick="scanBarcodeFill()" class="flex flex-col items-center justify-center p-3 bg-purple-50 dark:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-800 transition shadow-sm group">
-                <span class="text-2xl mb-1 group-hover:scale-110 transition">🤳</span>
-                <span class="text-[10px] font-bold text-purple-700 dark:text-purple-300 uppercase">Barcode</span>
-            </button>
+            <label class="flex flex-col items-center justify-center p-4 bg-purple-50 dark:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-800 transition shadow-sm cursor-pointer group">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition">📦</span>
+                <span class="text-xs font-bold text-purple-700 dark:text-purple-300 uppercase">Packet Snap</span>
+                <input type="file" class="hidden" capture="environment" onchange="snapPacketFill(this)">
+            </label>
         </div>
-
+        <div id="aiStatusMessage" class="hidden mt-4 mb-2 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm text-center transition-all"></div>
         <form action="/add" method="POST">
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <label class="cursor-pointer">
@@ -52,10 +48,15 @@
 
                 <div id="manualSection" class="hidden">
                     <div class="flex gap-2">
-                        <input type="text" id="manualInput" placeholder="Type name (e.g. Pasta)" class="flex-1 border-2 border-gray-200 rounded p-3 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-emerald-500">
+                        <div class="relative flex-1">
+                            <input type="text" id="manualInput" placeholder="Type name (e.g. Pasta)" class="w-full border-2 border-gray-200 rounded p-3 pr-10 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-emerald-500">
+                            <button type="button" onclick="startVoiceFill()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl opacity-60 hover:opacity-100 hover:scale-110 transition" title="Speak your food">
+                                🎙️
+                            </button>
+                        </div>
                         <button type="button" onclick="askAI()" id="aiBtn" class="bg-purple-600 text-white px-4 rounded font-bold hover:bg-purple-700 transition flex items-center gap-1">✨ AI</button>
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">Type item and click AI to auto-estimate calories.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">Type or speak an item, then click AI to auto-estimate.</p>
                 </div>
             </div>
 
@@ -179,67 +180,98 @@
 
     // --- PART 2: NEW TOOL LOGIC (Voice/Camera/Barcode) ---
     
-    // 1. Voice Logic
+    // 1. Voice Logic (Fixed for Meal & Workout)
     function startVoiceFill() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) return alert("Browser not supported. Try Chrome.");
         
         const r = new SpeechRecognition();
         r.start(); 
-        alert("🎙️ Listening... Say your food!");
+        
+        const statusDiv = document.getElementById('aiStatusMessage');
+        statusDiv.classList.remove('hidden');
+        statusDiv.innerHTML = `<span class='animate-pulse'>🎙️ Listening... Say your ${mode}!</span>`;
         
         r.onresult = async (e) => {
             const text = e.results[0][0].transcript;
-            // Use existing Voice Route
-            const res = await fetch('/process_voice', {
-                method:'POST', 
-                headers:{'Content-Type':'application/json'}, 
-                body:JSON.stringify({text:text})
-            });
-            const data = await res.json();
-            if(data.name) {
-                fillFormFields(data);
-                alert(`✅ Identified: ${data.name}`);
-            } else {
-                alert("Could not understand.");
+            statusDiv.innerHTML = `<span class='animate-pulse'>🎙️ Processing: "${text}"...</span>`;
+            
+            try {
+                const res = await fetch('/process_voice', {
+                    method:'POST', 
+                    headers:{'Content-Type':'application/json'}, 
+                    // Yahan hum 'mode' bhej rahe hain (meal ya workout)
+                    body:JSON.stringify({text: text, mode: mode}) 
+                });
+                const data = await res.json();
+                
+                if(data.name) {
+                    fillFormFields(data);
+                    statusDiv.innerHTML = `✅ Identified: <b>${data.name}</b>`;
+                } else {
+                    statusDiv.innerHTML = `❌ Could not understand. Try again.`;
+                }
+            } catch(e) {
+                statusDiv.innerHTML = `❌ Network Error.`;
             }
         };
     }
 
     // 2. Camera Logic
     async function snapFoodFill(input) {
+    if(!input.files[0]) return;
+    
+    // Status box dikhayein
+    const statusDiv = document.getElementById('aiStatusMessage');
+    statusDiv.classList.remove('hidden');
+    statusDiv.innerHTML = "<span class='animate-pulse'>📸 AI is analyzing and saving your food...</span>";
+    
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    
+    try {
+        const res = await fetch('/analyze_food_image', {method:'POST', body:formData});
+        const data = await res.json();
+        
+        if(data.success) {
+            // ✅ Yahan aapki demand ke hisaab se Hyperlink wala message hai
+            statusDiv.innerHTML = `✅ <b>${data.name}</b> logged in entry, <a href="/dashboard" class="text-blue-600 font-extrabold underline hover:text-blue-800">see</a>`;
+        } else {
+            statusDiv.innerHTML = `❌ Oops: ${data.error}`;
+        }
+    } catch (e) {
+        statusDiv.innerHTML = `❌ Network Error. Please try again.`;
+    }
+    
+    // Input clear kar dein taaki dobara photo daali ja sake
+    input.value = '';
+}
+
+    // 3. Packet Scan Logic (Auto-Log)
+    async function snapPacketFill(input) {
         if(!input.files[0]) return;
-        alert("📸 Analyzing Food Image... Please wait.");
+        
+        const statusDiv = document.getElementById('aiStatusMessage');
+        statusDiv.classList.remove('hidden');
+        statusDiv.innerHTML = "<span class='animate-pulse'>📦 Reading packet nutrition label...</span>";
         
         const formData = new FormData();
         formData.append('image', input.files[0]);
         
-        const res = await fetch('/analyze_food_image', {method:'POST', body:formData});
-        const data = await res.json();
+        try {
+            const res = await fetch('/analyze_packet_image', {method:'POST', body:formData});
+            const data = await res.json();
+            
+            if(data.success) {
+                statusDiv.innerHTML = `✅ <b>${data.name}</b> logged in entry, <a href="/dashboard" class="text-blue-600 font-extrabold underline hover:text-blue-800">see</a>`;
+            } else {
+                statusDiv.innerHTML = `❌ Oops: ${data.error}`;
+            }
+        } catch (e) {
+            statusDiv.innerHTML = `❌ Network Error. Please try again.`;
+        }
         
-        if(data.name) {
-            fillFormFields(data);
-            alert(`✅ Identified: ${data.name}`);
-        } else {
-            alert("Could not identify food.");
-        }
-    }
-
-    // 3. Barcode Logic
-    function scanBarcodeFill() {
-        const code = prompt("🤳 Enter Barcode Number:");
-        if(code) {
-            fetch(`/scan_barcode/${code}`)
-            .then(r => r.json())
-            .then(data => {
-                if(data.name) {
-                    fillFormFields(data);
-                    alert(`✅ Found: ${data.name}`);
-                } else {
-                    alert("Product not found.");
-                }
-            });
-        }
+        input.value = ''; // Reset
     }
 </script>
 {% endblock %}
